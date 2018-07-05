@@ -22,14 +22,14 @@ public class SoapCaller {
   
   public static void main(String[] args) {
   
+	  boolean returnFlag = false;
+	  
     try {
       URL u = new URL(SERVICE);
       URLConnection uc = u.openConnection();
       HttpURLConnection connection = (HttpURLConnection) uc;
       connection.setDoOutput(true);
       connection.setDoInput(true);
-     
-      
       connection.setRequestProperty("Content-Length",String.valueOf(XMLREQUEST.length()));
       connection.setRequestProperty("Content-Type", "application/soap+xml; charset=utf-8");
       connection.setRequestMethod("POST");
@@ -51,15 +51,21 @@ public class SoapCaller {
       while ((c = in.read()) != -1) 
     	  {System.out.write(c);
     	  sb.append((char)c);}
-      
       in.close();
-      //System.out.println(sb.toString());
+
       if (sb.toString().contains(" <m:NumberToWordsResult>nine </m:NumberToWordsResult>") && soapMessage.equals("OK")) {
-    	  System.out.println("\nTadaaaah! Server Up and Running");
+    	  returnFlag = true;
       }
-    }
+    } 
     catch (IOException e) {
-      System.err.println(e); 
+    	System.err.println("The Web service is not available right now..."); 
+  
     }
+    
+    if (returnFlag == true){
+    	System.out.println("\nTadaaaah! Server Up and Running. Go on doing whatever you wanted with this WS");}
+    	
+    	
+    }
+    
   }
-}
